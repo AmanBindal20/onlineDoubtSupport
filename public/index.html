@@ -20,34 +20,41 @@
 				<span action="dismiss"><i class="fa fa-close " ></i> </span>
 			 </div>
 			 <div class="body">
-				<div class="middle"  purpose="whiteboard"> 
-				   
-				<div class="editingOption">
-						<div>
-							<div class="pensize black"> <i class="fa fa-pencil 2" style="font-size:0.9rem"> </i></a> </div>
-							<div class="pensize  black"> <i class="fa fa-pencil 3" style="font-size:1.2rem"> </i></a> </div>
-							<div class="pensize  black"> <i class="fa fa-pencil 6" style="font-size:1.8rem"> </i></a> </div>
-						</div>
-						<div>
-							<div class="color "> <i class="fa fa-circle black"> </i></a> </div>
-							<div class="color "> <i class="fa fa-circle red "> </i></div>
-							<div class="color "> <i class="fa fa-circle green"> </i></div>
-							<div class="color "><i class="fa fa-circle blue"> </i></div>
-							<div class="color "><i class="fa fa-circle yellow"> </i></div>
-						</div>
-						<div>
-							<div class="rubber"><i class="fa fa-eraser fa-2x"> </i> </div>
-						</div>
-					</div>
-				   <div class="whiteboardWrapper canvas-wrapper" >
-					  <canvas class="whiteboard" style="width:100%; height:100%" ></canvas>
-				   </div>
-				</div>
+				
 				<div class="left">
-				   <div purpose="editor"></div>
-				   <p>Controlled by: <span purpose="controlled-by"></span></p>
-				   <a href="#" action="control">Control</a> 
+
+						<div class="whiteboard-wrapper"  purpose="whiteboard"> 
+				   
+								<div class="editingOption">
+										<div>
+											<div class="pensize black"> <i class="fa fa-pencil 2" style="font-size:0.9rem"> </i></a> </div>
+											<div class="pensize  black"> <i class="fa fa-pencil 3" style="font-size:1.2rem"> </i></a> </div>
+											<div class="pensize  black"> <i class="fa fa-pencil 6" style="font-size:1.8rem"> </i></a> </div>
+										</div>
+										<div>
+											<div class="color "> <i class="fa fa-circle black"> </i></a> </div>
+											<div class="color "> <i class="fa fa-circle red "> </i></div>
+											<div class="color "> <i class="fa fa-circle green"> </i></div>
+											<div class="color "><i class="fa fa-circle blue"> </i></div>
+											<div class="color "><i class="fa fa-circle yellow"> </i></div>
+										</div>
+										<div>
+											<div class="rubber"><i class="fa fa-eraser fa-2x"> </i> </div>
+										</div>
+									</div>
+								   <div class="whiteboardWrapper canvas-wrapper" >
+									  <canvas class="whiteboard" style="width:100%; height:100%" ></canvas>
+								   </div>
+								</div>
+
+
+				   <div class="editor-wrapper" purpose="editor"></div>
+				   <div > 
+				  <div class="controlled-by-name"> <p>Controlled by: <span purpose="controlled-by"></span> </p></div>
+				  <div class="controlled-buttons">  <a href="#" action="control">Control</a> 
 				   <a href="#" action="release" disabled="disabled">Release</a> 
+				  </div>
+			    	</div>
 				</div>
 				<div class="right">
 				   <ul purpose="chat"></ul>

@@ -20,9 +20,9 @@ div[user] {
 }
 
 .header {
-	height: 7%;
-	width: 100%;
-	background-color: #003b46;
+    height: 40px;
+    width: 100%;
+    background-color: #003b46;
 }
 
 div[user] div.header span[purpose=user-name] {
@@ -53,18 +53,14 @@ div[user].big {
 }
 
 div[user].big div.header span[purpose=user-name] {
-	font-size: 36px;
+	font-size: 1.5rem;
 	width: 96%;
-	padding-left: 15px;
 	float: left;
+	text-align: center;
 }
 
 div[user].big div.header span[action=dismiss] {
-	font-size: 36px;
-
-	width: 5px;
-	float: left;
-
+	font-size: 1.5rem;
 	display: inline;
 
 	cursor: pointer;
@@ -79,24 +75,25 @@ div[user].big div.small-body {
 }
 
 div[user].big div.body div.left {
-	width: 40%;
-	float: left;
-	/* //background-color: #77FF77; */
-
-	padding: 10px;
-	margin: 10px;
-
-	min-height: 500px;
+    width: 75%;
+    float: left;
+    /* padding: 10px; */
+    margin: 1%;
+    min-height: 500px;
 }
 
-div[user].big div.body div.middle {
-	width: 28%;
-	float: left;
-	background-color: white;
-	padding: 0px;
-	margin: 10px;
-	min-height: 500px;
-	border: 4px solid teal;
+.editor-wrapper{
+	width:48%;
+}
+
+div[user].big div.body div.whiteboard-wrapper {
+	width: 50%;
+    float: left;
+    background-color: white;
+    padding: 0px;
+    margin-right: 1%;
+    height: 486px;
+    border: 4px solid teal;
 }
 
 div[user].big div.body div.left a:link,
@@ -130,34 +127,28 @@ div[user].big div.body div.left p {
 
 div[user].big div.body div.left [purpose=editor] {
 	padding: 0px;
-
-	width: 100%;
-	min-height: 400px;
+    width: 49%;
+    min-height: 485px;
 }
 
 div[user].big div.body div.right {
-	width: 23%;
-	float: left;
-	background-color: #f2f4f6;
-
-	/* //padding: 10px; */
-	margin: 10px;
-
-	min-height: 500px;
-	border: 4px solid teal;
+	width: 21%;
+    float: left;
+    background-color: #f2f4f6;
+    margin: 10px;
+    min-height: 500px;
+    border: 4px solid teal;
 }
 
 div[user].big div.body div.right ul {
 	padding: 0px;
-
 	width: 100%;
 	min-height: 425px;
-
 	overflow: auto;
 }
 
 div[user].big div.body div.right ul li.left {
-	height: 18px;
+	/* height: 18px; */
 	background-color: #6b48ff;
 	border-radius: 2%;
 	color: white;
@@ -168,7 +159,7 @@ div[user].big div.body div.right ul li.left {
 }
 
 div[user].big div.body div.right ul li.right {
-	height: 18px;
+	/* height: 18px; */
 	background-color: #2ad8a8;
 	border-radius: 2%;
 	color: white;
