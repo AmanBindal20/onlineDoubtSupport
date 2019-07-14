@@ -1,0 +1,241 @@
+html,
+body {
+	padding: 0px;
+	margin: 0px;
+	font-family: raleway;
+}
+
+div[user] {
+	width: 175px;
+	height: 35px;
+
+	float: left;
+
+	/* margin: 5px;
+	padding: 5px; */
+
+	background-color: #66A5Ad;
+	color: white;
+	cursor: pointer;
+}
+
+.header {
+	height: 7%;
+	width: 100%;
+	background-color: #003b46;
+}
+
+div[user] div.header span[purpose=user-name] {
+	width: 90%;
+	float: left;
+	/* //background-color: white;	 */
+}
+
+div[user] div.header span[action=dismiss] {
+	display: none;
+}
+
+div[user] div.body {
+	display: none;
+}
+
+div[user] div.small-body {
+	display: block;
+}
+
+div[user].big {
+	width: 100%;
+	height: 100%;
+
+	position: fixed;
+	top: 0px;
+	left: 0px;
+}
+
+div[user].big div.header span[purpose=user-name] {
+	font-size: 36px;
+	width: 96%;
+	padding-left: 15px;
+	float: left;
+}
+
+div[user].big div.header span[action=dismiss] {
+	font-size: 36px;
+
+	width: 5px;
+	float: left;
+
+	display: inline;
+
+	cursor: pointer;
+}
+
+div[user].big div.body {
+	display: block;
+}
+
+div[user].big div.small-body {
+	display: none;
+}
+
+div[user].big div.body div.left {
+	width: 40%;
+	float: left;
+	/* //background-color: #77FF77; */
+
+	padding: 10px;
+	margin: 10px;
+
+	min-height: 500px;
+}
+
+div[user].big div.body div.middle {
+	width: 28%;
+	float: left;
+	background-color: white;
+	padding: 0px;
+	margin: 10px;
+	min-height: 500px;
+	border: 4px solid teal;
+}
+
+div[user].big div.body div.left a:link,
+div[user].big div.body div.left a:visited {
+	background-color: #f96d15;
+	color: white;
+	padding: 14px 25px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+}
+
+div[user].big div.body div.left a:hover,
+div[user].big div.body div.left a:active {
+	background-color: #f2f4f6;
+}
+
+div[user].big div.body div.left a[disabled]:link,
+div[user].big div.body div.left a[disabled]:visited {
+	background-color: #EEEEEE;
+}
+
+div[user].big div.body div.left a[disabled]:hover,
+div[user].big div.body div.left a[disabled]:active {
+	background-color: #EEEEEE;
+}
+
+div[user].big div.body div.left p {
+	width: 100%;
+}
+
+div[user].big div.body div.left [purpose=editor] {
+	padding: 0px;
+
+	width: 100%;
+	min-height: 400px;
+}
+
+div[user].big div.body div.right {
+	width: 23%;
+	float: left;
+	background-color: #f2f4f6;
+
+	/* //padding: 10px; */
+	margin: 10px;
+
+	min-height: 500px;
+	border: 4px solid teal;
+}
+
+div[user].big div.body div.right ul {
+	padding: 0px;
+
+	width: 100%;
+	min-height: 425px;
+
+	overflow: auto;
+}
+
+div[user].big div.body div.right ul li.left {
+	height: 18px;
+	background-color: #6b48ff;
+	border-radius: 2%;
+	color: white;
+	padding: 8px;
+	width: 74%;
+	float: left;
+	margin-top: 5px;
+}
+
+div[user].big div.body div.right ul li.right {
+	height: 18px;
+	background-color: #2ad8a8;
+	border-radius: 2%;
+	color: white;
+	padding: 8px;
+	width: 61%;
+	float: right;
+	margin-top: 5px;
+}
+
+div[user].big div.body div.right textarea {
+	width: 98%;
+}
+
+li {
+	list-style-type: none;
+}
+
+.color {
+	height: 20px;
+	width: 20px;
+	border-radius: 13%;
+	margin: 0%;
+	padding: 0%;
+	margin-right: 5px;
+	/* display: flex; */
+	margin-top: 6px;
+	float: left;
+	margin-left: 7px;
+}
+.pensize {
+	float: left;
+	margin-left: 7px;
+}
+
+.red {
+	color: red;
+}
+
+.green {
+	color: green;
+}
+
+.blue {
+	color: blue;
+
+}
+
+.black {
+	color: black;
+}
+
+.yellow {
+	color: yellow;
+}
+
+.editingOption {
+	height: 33px;
+	width: 100%;
+	background-color: #cbeae8;
+	margin-top: 19px;
+	margin: 0px;
+	padding: 1px;
+}
+.rubber{
+	color: #607D8B;
+	float:right;
+}
+
+.canvas-wrapper {position:relative}
+.canvas-wrapper:after {content:'';position:absolute;z-index:999;top:0;left:0;width:100%;height:100%;cursor: not-allowed;    pointer-events: none}
