@@ -41,22 +41,19 @@ $(document).ready(function () {
 				editors[otherUser].setReadOnly(true);
 				editors[otherUser].getSession().on('change', sendEditorMessage);
 				initCanvas($div, otherUser);
-
-
-
 			}
 		}
 	}
 
 	function initCanvas(containerId, otherUser) {
-
 		canvas = $(containerId).find('.whiteboard')[0];
 		colors = $(containerId).find('.color');
 		pensize = $(containerId).find('.pensize');
 		rubber = $(containerId).find('.rubber')[0];
 		context = canvas.getContext('2d');
 
-		whiteBoards[otherUser] = context;
+		whiteBoards[otherUser] = {context: context, isDisabled:true};
+		
 
 		canvas.addEventListener('mousedown', onMouseDown, false);
 		canvas.addEventListener('mouseup', onMouseUp, false);
@@ -136,6 +133,7 @@ $(document).ready(function () {
 
 		$parentDiv.find('span[purpose=controlled-by]').html(data.from);
 		editors[otherUser].setReadOnly(true);
+		whiteBoards[otherUser].isDisabled = true;
 		$parentDiv.find('[action=control]').attr('disabled', 'disabled');
 		$parentDiv.find('span[purpose=activity]').html("Control");
 	}
@@ -153,9 +151,9 @@ $(document).ready(function () {
 
 		$parentDiv.find('span[purpose=controlled-by]').html('');
 		editors[otherUser].setReadOnly(true);
+		whiteBoards[otherUser].isEnabled = false
 		$parentDiv.find('[action=control]').removeAttr('disabled');
 		$parentDiv.find('span[purpose=activity]').html("Release");
-		socket.on('drawing', onDrawingEvent);
 	}
 
 	function editorMessageReceived(data) {
@@ -180,18 +178,13 @@ $(document).ready(function () {
 			otherUser = data.from;
 		}
 
-		var otherContext = whiteBoards[otherUser];
-		var w = canvas.width;
-		var h = canvas.height;
-		//drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color, otherUser);
-
+		var otherContext = whiteBoards[otherUser].context;
 		var drawingData = data.message;
 		x0 = drawingData.x0;
 		y0 = drawingData.y0;
 
 		y1 = drawingData.y1;
 		x1 = drawingData.x1;
-		//context = whiteBoards[otherUser];
 		otherContext.beginPath();
 		otherContext.moveTo(x0, y0);
 		otherContext.lineTo(x1, y1);
@@ -199,8 +192,6 @@ $(document).ready(function () {
 		otherContext.lineWidth = drawingData.pensize;
 		otherContext.stroke();
 		otherContext.closePath();
-
-		//	$parentDiv.find('span[purpose=activity]').html("Drawing");
 	}
 
 
@@ -230,6 +221,7 @@ $(document).ready(function () {
 
 		$('div.big span[purpose=controlled-by]').html(currentUser);
 		editors[otherUser].setReadOnly(false);
+		whiteBoards[otherUser].isDisabled = false;
 		$('div.big [action=control]').attr('disabled', 'disabled');
 		$('div.big [action=release]').removeAttr('disabled');
 
@@ -247,6 +239,7 @@ $(document).ready(function () {
 
 		$('div.big span[purpose=controlled-by]').html('');
 		editors[otherUser].setReadOnly(true);
+		whiteBoards[otherUser].isDisabled = true;
 		$('div.big [action=control]').removeAttr('disabled');
 		$('div.big [action=release]').attr('disabled', 'disabled');
 
@@ -287,13 +280,16 @@ $(document).ready(function () {
 	}
 
 	//message related to drawing
-	function drawLine(x0, y0, x1, y1, emit, otherContext) {
+	function drawLine(x0, y0, x1, y1, emit) {
+		var otherUser = $('div.big span[purpose=user-name]').html();
+		if(whiteBoards[otherUser].isDisabled){
+			return false;
+		}
 		x0 = x0 - 10;
 		y0 = y0 - 90;
 
 		y1 = y1 - 90;
 		x1 = x1 - 10;
-		//context = whiteBoards[otherUser];
 		context.beginPath();
 		context.moveTo(x0, y0);
 		context.lineTo(x1, y1);
