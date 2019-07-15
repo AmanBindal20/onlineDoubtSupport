@@ -13,7 +13,8 @@
 	<script type="text/javascript" src="js/Collaborate.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Raleway:400,500,600" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<script id="userTemplate" type="text/template">
 		<div class="header">
 				<span purpose="user-name"></span>
@@ -43,7 +44,7 @@
 										</div>
 									</div>
 								   <div class="whiteboardWrapper canvas-wrapper" >
-									  <canvas class="whiteboard" style="width:100%; height:478px" ></canvas>
+									  <canvas class="whiteboard" style="width:100%; height:480px" ></canvas>
 								   </div>
 								</div>
 
@@ -64,10 +65,53 @@
 			 <div class="small-body">
 			 Last Activity : <span purpose="activity"></span>
 			 <div>
-		 </script>
+   </script>
 
 
-	
+	<div class="container-fluid">
+		<header class="header text-center">
+			<h4>Online Doubt Support</h1>
+		</header>
+		<div class="row">
+			<div class="col col-md-12 al">
+				</br>
+				<p class="text-center">
+					This is a real time chat application which,
+					with this application students could be able to avail online doubt support..</p>
+			</div>
+		</div>
+
+
+		<div class="row" id="onlineUsers">
+			<div class="col-md-4 offset-md-4 text-center">
+				<div class="text-center">
+					<h1 class="display-5">Online Users </h1>
+					<ul class="list-group" id="onlineUsersList"></ul>
+				</div>
+			</div>
+
+
+		</div>
+
+		<div class="row" id="joinUser">
+
+			<div class="col-md-4 offset-md-4 text-center">
+				<form id="userForm" class="form-inlin justify-content-center">
+					<h1 class="display-5">Enter UserName </h1>
+					<div class="form-group form-group-md">
+						<label> </label>
+						<input type="text" class="form-control" id="userName" placeholder="User Name"></input>
+					</div>
+					</br>
+					<input type="button" action="loginUser" class="btn btn-block btn-warning" value="Join"></input>
+				</form>
+			</div>
+
+		</div>
+
+	</div>
+
+
 </body>
 
 </html>

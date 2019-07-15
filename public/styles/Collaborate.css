@@ -3,6 +3,15 @@ body {
 	padding: 0px;
 	margin: 0px;
 	font-family: raleway;
+	color: white;
+	background-color: #66a5ad
+}
+
+.container-fluid {
+	padding: 0px !important;
+	color: white;
+	font-family: raleway;
+	background-color: #66A5Ad;
 }
 
 div[user] {
@@ -17,7 +26,11 @@ div[user] {
 	background-color: #66A5Ad;
 	color: white;
 	cursor: pointer;
+	display: none;
 }
+
+.list-group-item { background: #6b48ff !important; }
+.list-group-item:nth-child(odd) { background: #2ad8a8 !important; }
 
 .header {
 	height: 40px;
@@ -50,6 +63,7 @@ div[user].big {
 	position: fixed;
 	top: 0px;
 	left: 0px;
+	display: block
 }
 
 div[user].big div.header span[purpose=user-name] {
@@ -75,14 +89,14 @@ div[user].big div.small-body {
 }
 
 div[user].big div.body div.left {
-    width: 75%;
-    float: left;
-    /* padding: 10px; */
-    margin: 1%;
-    min-height: 550px;
-    border: 2px solid #607D8B;
-    border-radius: 10px;
-    background-color: #003b46;
+	width: 75%;
+	float: left;
+	/* padding: 10px; */
+	margin: 1%;
+	min-height: 550px;
+	border: 2px solid #607D8B;
+	border-radius: 10px;
+	background-color: #003b46;
 }
 
 .editor-wrapper {
@@ -103,7 +117,7 @@ div[user].big div.body div.left a:link,
 div[user].big div.body div.left a:visited {
 	background-color: #f96d15;
 	color: white;
-	padding: 1px 21px;
+	padding: 10px 21px;
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
@@ -150,26 +164,92 @@ div[user].big div.body div.right ul {
 	overflow: auto;
 }
 
-div[user].big div.body div.right ul li.left {
+
+.recieved-message {
 	/* height: 18px; */
-	background-color: #6b48ff;
 	border-radius: 2%;
 	color: white;
-	padding: 8px;
-	width: 74%;
+	padding: 2px;
+	width: 84%;
 	float: left;
 	margin-top: 5px;
 }
 
-div[user].big div.body div.right ul li.right {
+.recieved-message .message {
+	background-color: #6b48ff;
+	margin: 3px;
+	padding-left: 10px;
+	padding-left: 7px;
+	min-height: 30px;
+	border-radius: 5px;
+
+
+}
+
+.recieved-message .user:after {
+	left: inherit;
+	bottom: 100%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: sticky;
+	pointer-events: none;
+	border-bottom-color: #6b48ff;
+	border-width: 12px;
+	margin-left: -10px;
+	top: margin;
+	margin: -15px;
+}
+
+.recieved-message .user {
+	color: #6b48ff;
+	margin: 3px;
+	padding-left: 6px;
+	font-size: 0.7rem;
+}
+
+
+.sent-message {
 	/* height: 18px; */
-	background-color: #2ad8a8;
 	border-radius: 2%;
 	color: white;
-	padding: 8px;
-	width: 61%;
+	padding: 2px;
+	width: 84%;
 	float: right;
 	margin-top: 5px;
+}
+
+.sent-message .message {
+	background-color: #2ad8a8;
+	margin: 3px;
+	padding-left: 10px;
+	padding-left: 7px;
+	min-height: 30px;
+	border-radius: 5px;
+}
+
+.sent-message .user:after {
+	left: inherit;
+	bottom: 100%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: sticky;
+	pointer-events: none;
+	border-bottom-color: #2ad8a8;
+	border-width: 12px;
+	margin-left: -10px;
+	top: margin;
+	margin: -15px;
+}
+
+.sent-message .user {
+	color: #2ad8a8;
+	margin: 3px;
+	padding-left: 6px;
+	font-size: 0.7rem;
 }
 
 div[user].big div.body div.right textarea {
@@ -232,14 +312,16 @@ li {
 	color: #607D8B;
 	float: right;
 }
-.screen-control{
+
+.screen-control {
 	float: left;
-    width: 100%;
+	width: 100%;
 }
+
 .controlled-by-name {
-    float: left;
-    width: 20%;
-    margin-left: 20px;
+	float: left;
+	width: 20%;
+	margin-left: 20px;
 }
 
 .controlled-buttons {

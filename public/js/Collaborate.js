@@ -9,20 +9,44 @@ $(document).ready(function () {
 
 	// assign variables
 	$userTemplate = $('#userTemplate');
+	$userForm = $('userForm');
 	editors = {};
 	whiteBoards = {};
+	$onlineUsers = $("#onlineUsers");
+	$joinUser = $("#joinUser");
 
 	// define functions
 	function socketConnected() {
-		currentUser = window.prompt("Your name please?");
-		$('title').html(currentUser);
-		socket.emit('user-joined', currentUser);
+		//currentUser = window.prompt("Your name please?");
+
+		// if (currentUser && currentUser.length > 0) {
+		// 	currentUser = currentUser.replace(/ /g, "_");
+		// } else {
+		// 	var counter = editors && editors.length > 0 ? editors.length : 1;
+		// 	currentUser = "User_" + counter + 1;
+		// }
+		// 
+		//socket.emit('user-joined', currentUser);
+	}
+
+	function loginUser(event) {
+		event.preventDefault();
+
+		if ($("#userName") && $("#userName").val()) {
+			currentUser = $("#userName").val();
+			currentUser = currentUser.replace(/ /g, "_");
+			$('title').html(currentUser);
+			socket.emit('user-joined', currentUser);
+			$joinUser.hide();
+			$onlineUsers.show();
+		} else {
+			alert('Please Enter UserName');
+		}
 	}
 
 	function userJoined(allUsers) {
 		for (i = 0; i < allUsers.length; i++) {
 			var otherUser = allUsers[i];
-
 			if ($('div[user=' + otherUser + ']').length == 0 && otherUser !== currentUser) {
 				var $div = $('<div />');
 				$div.html($userTemplate.html());
@@ -33,7 +57,9 @@ $(document).ready(function () {
 				var boardId = otherUser + "WhiteBoard";
 				$div.find('canvas[purpose=whiteboard]').attr('id', boardId);
 
+				var $li = $('<li action="loggedInUsers" class="list-group-item" userName="' + otherUser + '">' + otherUser + '</li>');
 				$('body').append($div);
+				$("#onlineUsersList").append($li);
 
 				editors[otherUser] = ace.edit(otherUser + "Editor");
 				editors[otherUser].setTheme("ace/theme/monokai");
@@ -52,8 +78,11 @@ $(document).ready(function () {
 		rubber = $(containerId).find('.rubber')[0];
 		context = canvas.getContext('2d');
 
-		whiteBoards[otherUser] = {context: context, isDisabled:true};
-		
+		whiteBoards[otherUser] = {
+			context: context,
+			isDisabled: true
+		};
+
 
 		canvas.addEventListener('mousedown', onMouseDown, false);
 		canvas.addEventListener('mouseup', onMouseUp, false);
@@ -81,7 +110,9 @@ $(document).ready(function () {
 
 	function userLeft(otherUser) {
 		$('div[user=' + otherUser + ']').remove();
+		$('li[username=' + otherUser + ']').remove();
 		delete editors[otherUser];
+		delete whiteBoards[otherUser];
 	}
 
 	function messageReceived(data) {
@@ -101,6 +132,9 @@ $(document).ready(function () {
 			case "drawing":
 				drawingDataReceived(data);
 				break;
+			case "clearDrawing":
+				clearDrawingReceived(data);
+				break;
 			default:
 				break;
 		}
@@ -115,7 +149,8 @@ $(document).ready(function () {
 			$parentDiv = $('div[user=' + data.from + ']');
 		}
 
-		$li = $('<li />').html(data.message + ": " + data.from).addClass('left');
+		var recievedData = '<div class="user"><span class="message-data-name"><i class="fa fa-circle online"></i>' + data.from + '</span></div>';
+		$li = $('<li/>').html(recievedData + data.message).addClass('recieved-message');
 		$parentDiv.find('ul[purpose=chat]').append($li);
 		$parentDiv.find('span[purpose=activity]').html("Chat");
 	}
@@ -151,18 +186,24 @@ $(document).ready(function () {
 
 		$parentDiv.find('span[purpose=controlled-by]').html('');
 		editors[otherUser].setReadOnly(true);
-		whiteBoards[otherUser].isEnabled = false
+		whiteBoards[otherUser].isDisabled = true;
 		$parentDiv.find('[action=control]').removeAttr('disabled');
 		$parentDiv.find('span[purpose=activity]').html("Release");
 	}
 
 	function editorMessageReceived(data) {
-		var otherUser;
+		var $parentDiv, otherUser;
 
 		if (data.to === 'public') {
 			otherUser = 'public';
 		} else {
 			otherUser = data.from;
+		}
+
+		if (data.to === 'public') {
+			$parentDiv = $('div[user=public]');
+		} else {
+			$parentDiv = $('div[user=' + data.from + ']');
 		}
 
 		editors[otherUser].setValue(data.message);
@@ -204,7 +245,9 @@ $(document).ready(function () {
 			var message = $(this).val();
 			$(this).val('');
 
-			var $li = $('<li />').html(message + ": " + currentUser).addClass('right');
+			var senderData = '<div class="user"><span class="message-data-name"><i class="fa fa-circle online"></i>' + currentUser + '</span></div>';
+			var message = '<div class="message">' + message + '</div>';
+			$li = $('<li/>').html(senderData + message).addClass('sent-message');
 			$('div.big ul[purpose=chat]').append($li);
 
 			socket.emit('message', {
@@ -268,21 +311,29 @@ $(document).ready(function () {
 	}
 
 	function showUser() {
-		$(this).addClass('big');
+		var userName = $(this).attr('userName');
+		if (userName) {
+			$onlineUsers.hide();
+			//$(this).addClass('big');
+			//var user = $('div[user=' + userName + ']');
+			$('div[user=' + userName + ']').addClass('big');
 
-		canvas = $(this).find('.whiteboard')[0];
-		context = canvas.getContext('2d');
+			canvas = whiteBoards[userName];
+			context = canvas.context;
+		}
 	}
 
 	function dismissUser() {
 		$(this).closest('div[user]').removeClass('big');
+		$onlineUsers.show();
 		return false;
 	}
 
 	//message related to drawing
 	function drawLine(x0, y0, x1, y1, emit) {
 		var otherUser = $('div.big span[purpose=user-name]').html();
-		if(whiteBoards[otherUser].isDisabled){
+		var context = whiteBoards[otherUser].context;
+		if (whiteBoards[otherUser].isDisabled) {
 			return false;
 		}
 		x0 = x0 - 10;
@@ -301,8 +352,8 @@ $(document).ready(function () {
 		if (!emit) {
 			return;
 		}
-		var w = canvas.width;
-		var h = canvas.height;
+		//var w = canvas.width;
+		//var h = canvas.height;
 
 		var message1 = {
 			x0: x0,
@@ -313,6 +364,7 @@ $(document).ready(function () {
 			pensize: current.pensize
 		};
 		var otherUser = $('div.big span[purpose=user-name]').html();
+
 
 		socket.emit('message', {
 			to: otherUser,
@@ -328,8 +380,8 @@ $(document).ready(function () {
 		offsetY = e.target.offsetTop + e.offsetY;
 
 		drawing = true;
-		current.x = (e.clientX || e.touches[0].clientX);
-		current.y = (e.clientY || e.touches[0].clientY);
+		current.x = (e.clientX || (e.touches[0] && e.touches[0].clientX));
+		current.y = (e.clientY || (e.touches[0] || e.touches[0].clientY));
 	}
 
 	function onMouseUp(e) {
@@ -337,7 +389,7 @@ $(document).ready(function () {
 			return;
 		}
 		drawing = false;
-		drawLine(current.x, current.y, e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY,  true);
+		drawLine(current.x, current.y, e.clientX || (e.touches[0] && e.touches[0].clientX), e.clientY || (e.touches[0] && e.touches[0].clientY), true);
 	}
 
 	function onMouseMove(e) {
@@ -345,8 +397,8 @@ $(document).ready(function () {
 			return;
 		}
 		drawLine(current.x, current.y, e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY, true);
-		current.x = e.clientX || e.touches[0].clientX;
-		current.y = e.clientY || e.touches[0].clientY;
+		current.x = e.clientX || (e.touches[0] && e.touches[0].clientX);
+		current.y = e.clientY || (e.touches[0] && e.touches[0].clientY);
 	}
 
 	function onColorUpdate(e) {
@@ -371,15 +423,44 @@ $(document).ready(function () {
 	}
 
 	function clearCanvas() {
-		context.clearRect(0, 0, canvas.width, canvas.height);
+
+		var otherUser = $('div.big span[purpose=user-name]').html();
+		if (!whiteBoards[otherUser].isDisabled) {
+			var otherUserContext = whiteBoards[otherUser].context;
+			otherUserContext.clearRect(0, 0, otherUserContext.canvas.clientWidth, otherUserContext.canvas.clientHeight);
+
+
+			socket.emit('message', {
+				to: otherUser,
+				from: currentUser,
+				message: {},
+				messageType: 'clearDrawing'
+			});
+
+		}
 	}
 
-	
+	function clearDrawingReceived(data) {
+		var otherUser;
+
+		if (data.to === 'public') {
+			otherUser = 'public';
+		} else {
+			otherUser = data.from;
+		}
+
+		var otherUserContext = whiteBoards[otherUser].context;
+		otherUserContext.clearRect(0, 0, otherUserContext.canvas.clientWidth, otherUserContext.canvas.clientHeight);
+	}
+
+
 	// make the canvas fill its parent
 	function onResize() {
-		canvas.width = 400;
-		canvas.height = 490;
+		canvas.width = 500;
+		canvas.height = 487;
 	}
+
+
 
 	// define Init
 	function Init() {
@@ -390,13 +471,20 @@ $(document).ready(function () {
 		socket.on('user-left', userLeft);
 		socket.on('message', messageReceived);
 
+
+
 		$(document).on("keypress", "textarea[purpose=chat]", sendChatMessage);
 		$(document).on("click", "a[action=control]:not([disabled])", sendControlMessage);
 		$(document).on("click", "a[action=release]:not([disabled])", sendReleaseMessage);
 
 		$(document).on("click", "div[user]", showUser);
 		$(document).on("click", "span[action=dismiss]", dismissUser);
+
+		$(document).on("click", "input[action=loginUser]", loginUser);
+		$(document).on("click", "li[action=loggedInUsers]", showUser);
+
 		userJoined(["public"]);
+		$onlineUsers.hide();
 	}
 
 	// Call Init
