@@ -43,7 +43,7 @@ $(document).ready(function () {
 			alert('Please Enter UserName');
 		}
 	}
-
+	//call user joined of client
 	function userJoined(allUsers) {
 		for (i = 0; i < allUsers.length; i++) {
 			var otherUser = allUsers[i];
@@ -153,6 +153,10 @@ $(document).ready(function () {
 		$li = $('<li/>').html(recievedData + data.message).addClass('recieved-message');
 		$parentDiv.find('ul[purpose=chat]').append($li);
 		$parentDiv.find('span[purpose=activity]').html("Chat");
+		$('ul[purpose=chat]').animate({
+			scrollTop: $('ul[purpose=chat]').prop("scrollHeight")
+		}, 500);
+
 	}
 
 	function controlMessageReceived(data) {
@@ -239,24 +243,31 @@ $(document).ready(function () {
 
 
 	function sendChatMessage() {
-		if (window.event.which === 13) {
-			var otherUser = $('div.big span[purpose=user-name]').html();
+		//	if (window.event.which === 13) {
+		var otherUser = $('div.big span[purpose=user-name]').html();
 
-			var message = $(this).val();
-			$(this).val('');
-
-			var senderData = '<div class="user"><span class="message-data-name"><i class="fa fa-circle online"></i>' + currentUser + '</span></div>';
-			var message = '<div class="message">' + message + '</div>';
-			$li = $('<li/>').html(senderData + message).addClass('sent-message');
-			$('div.big ul[purpose=chat]').append($li);
-
-			socket.emit('message', {
-				to: otherUser,
-				from: currentUser,
-				message: message,
-				messageType: 'chat'
-			});
+		var message = $('div.big textarea[purpose=chat]').val(); //$(this).par();
+		//	$(this).val('');
+		$('div.big textarea[purpose=chat]').val('');
+		if (/\S/.test(message)) {
+			if (message.length > 0) {
+				var senderData = '<div class="user"><span class="message-data-name"><i class="fa fa-circle online"></i>' + currentUser + '</span></div>';
+				var message = '<div class="message">' + message + '</div>';
+				$li = $('<li/>').html(senderData + message).addClass('sent-message');
+				$('div.big ul[purpose=chat]').append($li);
+				$('ul[purpose=chat]').animate({
+					scrollTop: $('ul[purpose=chat]').prop("scrollHeight")
+				}, 500);
+				socket.emit('message', {
+					to: otherUser,
+					from: currentUser,
+					message: message,
+					messageType: 'chat'
+				});
+			}
 		}
+
+		//	}
 	}
 
 	function sendControlMessage() {
@@ -473,7 +484,7 @@ $(document).ready(function () {
 
 
 
-		$(document).on("keypress", "textarea[purpose=chat]", sendChatMessage);
+		//$(document).on("keypress", "textarea[purpose=chat]", sendChatMessage);
 		$(document).on("click", "a[action=control]:not([disabled])", sendControlMessage);
 		$(document).on("click", "a[action=release]:not([disabled])", sendReleaseMessage);
 
@@ -482,9 +493,12 @@ $(document).ready(function () {
 
 		$(document).on("click", "input[action=loginUser]", loginUser);
 		$(document).on("click", "li[action=loggedInUsers]", showUser);
+		$(document).on("click", "i[id=sendicon]", sendChatMessage);
 
 		userJoined(["public"]);
 		$onlineUsers.hide();
+
+		
 	}
 
 	// Call Init
